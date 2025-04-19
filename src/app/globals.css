@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 255, 255, 255;
+  --primary-color: 37, 99, 235;
+  --secondary-color: 59, 130, 246;
+  --accent-color: 14, 165, 233;
+  --success-color: 34, 197, 94;
+  --warning-color: 234, 179, 8;
+  --danger-color: 239, 68, 68;
+  --text-primary: 17, 24, 39;
+  --text-secondary: 75, 85, 99;
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 17, 24, 39;
+  --background-end-rgb: 31, 41, 55;
+  --primary-color: 59, 130, 246;
+  --secondary-color: 96, 165, 250;
+  --accent-color: 56, 189, 248;
+  --success-color: 74, 222, 128;
+  --warning-color: 250, 204, 21;
+  --danger-color: 248, 113, 113;
+  --text-primary: 243, 244, 246;
+  --text-secondary: 209, 213, 219;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Estilos personalizados para componentes */
+.card {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-colors duration-200;
+}
+
+.card-header {
+  @apply px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700;
+}
+
+.card-body {
+  @apply p-6;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md shadow-sm hover:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md shadow-sm hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200;
+}
+
+.input-field {
+  @apply mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200;
+}
+
+.label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Estilos para flashcards */
+.flashcard {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-500 transform hover:shadow-xl;
+  perspective: 1000px;
+  height: 300px;
+  width: 100%;
+}
+
+.flashcard-inner {
+  @apply relative w-full h-full transition-transform duration-500;
+  transform-style: preserve-3d;
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+  @apply absolute w-full h-full backface-visibility-hidden p-6 flex flex-col justify-between;
+  backface-visibility: hidden;
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+}
+
+/* Estilos para quiz */
+.quiz-option {
+  @apply relative p-4 border border-gray-300 dark:border-gray-700 rounded-lg mb-3 cursor-pointer transition-all duration-200;
+}
+
+.quiz-option:hover {
+  @apply bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700;
+}
+
+.quiz-option.selected {
+  @apply bg-blue-100 dark:bg-blue-900/50 border-blue-500 dark:border-blue-600;
+}
+
+.quiz-option.correct {
+  @apply bg-green-100 dark:bg-green-900/50 border-green-500 dark:border-green-600;
+}
+
+.quiz-option.incorrect {
+  @apply bg-red-100 dark:bg-red-900/50 border-red-500 dark:border-red-600;
+}
+
+/* Estilos para simulador */
+.scenario-container {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8 animate-fadeIn;
+}
+
+.patient-info {
+  @apply bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6 border-l-4 border-blue-500;
+}
+
+.response-option {
+  @apply bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-4 mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30;
+}
+
+/* Estilos para consulta */
+.search-result {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4 border-l-4 border-blue-500 animate-slideIn;
+}
+
+.medication-card {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:scale-[1.01];
+}
+
+.medication-header {
+  @apply bg-blue-50 dark:bg-blue-900/20 px-4 py-3 border-b border-blue-100 dark:border-blue-800;
+}
+
+/* Estilos para relatórios */
+.stat-card {
+  @apply bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center;
+}
+
+.progress-bar {
+  @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4;
+}
+
+.progress-bar-fill {
+  @apply h-2.5 rounded-full transition-all duration-500;
+}
+
+.chart-container {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 h-80;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .flashcard {
+    height: 250px;
+  }
+  
+  .card-header {
+    @apply px-4 py-4;
+  }
+  
+  .card-body {
+    @apply p-4;
+  }
+}
