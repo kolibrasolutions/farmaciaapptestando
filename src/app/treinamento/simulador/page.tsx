@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -237,23 +239,23 @@ export default function SimuladorAtendimentoPage() {
               opcoes: [
                 {
                   texto: "Apenas se tiver mais de 3 episódios por mês, pois isso já caracteriza enxaqueca crônica",
-                  feedback: "Parcialmente correto. A frequência é um fator importante, mas existem outros sinais de alerta que exigem avaliação médica imediata, independentemente da frequência.",
-                  pontos: 0
+                  feedback: "Parcialmente correto. A frequência é um fator importante, mas não é o único critério para buscar atendimento médico.",
+                  pontos: 5
                 },
                 {
-                  texto: "Se a dor for extremamente intensa e de início súbito ('a pior dor de cabeça da vida'), acompanhada de febre, rigidez no pescoço, confusão mental ou fraqueza nos membros",
-                  feedback: "Correto! Estes são sinais de alerta que podem indicar condições graves como hemorragia subaracnóidea, meningite ou AVC, que exigem atendimento médico de emergência.",
+                  texto: "Se a dor for muito intensa, não responder aos analgésicos comuns, ou estiver associada a sintomas como confusão, febre ou rigidez no pescoço",
+                  feedback: "Correto! Estes são sinais de alerta que podem indicar condições graves como meningite, hemorragia subaracnóidea ou outras emergências neurológicas que requerem avaliação médica imediata.",
                   pontos: 15,
                   correta: true
                 },
                 {
-                  texto: "Não é necessário procurar um médico, pois dores de cabeça são comuns e podem ser gerenciadas com medicamentos isentos de prescrição",
-                  feedback: "Incorreto. Embora muitas dores de cabeça possam ser tratadas com medicamentos isentos de prescrição, é importante que o cliente obtenha um diagnóstico adequado, especialmente se os episódios são recorrentes.",
-                  pontos: -10
+                  texto: "Não é necessário procurar um médico para dores de cabeça, pois são sempre benignas",
+                  feedback: "Incorreto. Embora muitas dores de cabeça sejam benignas, algumas podem ser sintomas de condições graves que requerem atenção médica.",
+                  pontos: -15
                 },
                 {
-                  texto: "Apenas se os medicamentos recomendados não fizerem efeito após 24 horas de uso",
-                  feedback: "Incorreto. Esperar 24 horas pode ser perigoso se houver sinais de alerta que indiquem condições graves. Além disso, dores de cabeça recorrentes merecem avaliação médica para diagnóstico e tratamento adequados.",
+                  texto: "Apenas se desenvolver efeitos colaterais aos medicamentos recomendados",
+                  feedback: "Incorreto. Embora os efeitos colaterais sejam motivo para buscar atendimento, existem outros sinais de alerta relacionados à própria dor de cabeça que também exigem avaliação médica.",
                   pontos: -5
                 }
               ]
@@ -267,21 +269,22 @@ export default function SimuladorAtendimentoPage() {
     }, 1000);
   }, []);
 
-  // Iniciar simulação
+  // Função para iniciar simulação
   const iniciarSimulacao = (cenario) => {
     setCenarioAtual(cenario);
     setEtapaAtual(0);
-    setSimulacaoIniciada(true);
-    setSimulacaoConcluida(false);
     setRespostaSelecionada(null);
     setFeedback(null);
-    setHistorico([]);
+    setPontos(0);
+    setSimulacaoIniciada(true);
+    setSimulacaoConcluida(false);
     setResultados({ acertos: 0, erros: 0, total: 0 });
+    setHistorico([]);
   };
 
-  // Selecionar resposta
-  const selecionarResposta = (indice, opcao) => {
-    setRespostaSelecionada(indice);
+  // Função para selecionar resposta
+  const selecionarResposta = (opcao, index) => {
+    setRespostaSelecionada(index);
     setFeedback(opcao.feedback);
     
     // Atualizar pontuação
@@ -303,28 +306,48 @@ export default function SimuladorAtendimentoPage() {
     }
     
     // Adicionar ao histórico
-    setHistorico([...historico, {
-      pergunta: cenarioAtual.etapas[etapaAtual].texto,
-      resposta: opcao.texto,
-      feedback: opcao.feedback,
-      correta: opcao.correta || false,
-      pontos: opcao.pontos
-    }]);
+    setHistorico([
+      ...historico,
+      {
+        etapa: cenarioAtual.etapas[etapaAtual].texto,
+        resposta: opcao.texto,
+        feedback: opcao.feedback,
+        pontos: opcao.pontos,
+        correta: opcao.correta || false
+      }
+    ]);
   };
 
-  // Avançar para próxima etapa
+  // Função para avançar para próxima etapa
   const proximaEtapa = () => {
-    if (etapaAtual < cenarioAtual.etapas.length - 1) {
+    // Se for uma etapa de informação, não há resposta para selecionar
+    if (cenarioAtual.etapas[etapaAtual].tipo === "informacao") {
       setEtapaAtual(etapaAtual + 1);
-      setRespostaSelecionada(null);
-      setFeedback(null);
-    } else {
-      // Simulação concluída
-      setSimulacaoConcluida(true);
+      return;
+    }
+    
+    // Se já selecionou uma resposta, avança para próxima etapa
+    if (respostaSelecionada !== null) {
+      if (etapaAtual < cenarioAtual.etapas.length - 1) {
+        setEtapaAtual(etapaAtual + 1);
+        setRespostaSelecionada(null);
+        setFeedback(null);
+        
+        // Se a próxima etapa for de informação, avança automaticamente
+        if (etapaAtual + 1 < cenarioAtual.etapas.length && 
+            cenarioAtual.etapas[etapaAtual + 1].tipo === "informacao") {
+          setTimeout(() => {
+            setEtapaAtual(etapaAtual + 2);
+          }, 3000);
+        }
+      } else {
+        // Simulação concluída
+        setSimulacaoConcluida(true);
+      }
     }
   };
 
-  // Reiniciar simulação
+  // Função para reiniciar simulação
   const reiniciarSimulacao = () => {
     setSimulacaoIniciada(false);
     setSimulacaoConcluida(false);
@@ -332,6 +355,7 @@ export default function SimuladorAtendimentoPage() {
     setEtapaAtual(0);
     setRespostaSelecionada(null);
     setFeedback(null);
+    setPontos(0);
   };
 
   // Renderização condicional para carregamento
@@ -341,7 +365,7 @@ export default function SimuladorAtendimentoPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            <p className="ml-4 text-gray-700">Carregando cenários...</p>
+            <p className="ml-4 text-gray-700">Carregando simulador...</p>
           </div>
         </div>
       </div>
@@ -354,13 +378,13 @@ export default function SimuladorAtendimentoPage() {
         {/* Cabeçalho */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Simulador de Atendimento</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Simulador de Atendimento Farmacêutico</h1>
             <p className="mt-1 text-sm text-gray-500">
-              Pratique o atendimento farmacêutico em cenários realistas
+              Pratique suas habilidades de atendimento em situações realistas
             </p>
           </div>
           <div className="flex items-center">
-            {simulacaoIniciada && (
+            {simulacaoIniciada && !simulacaoConcluida && (
               <div className="mr-4 bg-blue-100 px-3 py-1 rounded-full flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -377,22 +401,22 @@ export default function SimuladorAtendimentoPage() {
         {/* Seleção de cenário */}
         {!simulacaoIniciada ? (
           <div className="bg-white shadow rounded-lg p-6 mb-8">
-            <h2 className="text-lg font-medium text-gray-900 mb-6">Selecione um cenário para praticar</h2>
+            <h2 className="text-lg font-medium text-gray-900 mb-4">Selecione um cenário para iniciar a simulação</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {cenarios.map((cenario) => (
-                <div key={cenario.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <div className="p-6">
-                    <h3 className="text-xl font-medium text-gray-900 mb-2">{cenario.titulo}</h3>
+                <div
+                  key={cenario.id}
+                  className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                >
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">{cenario.titulo}</h3>
                     <p className="text-gray-600 mb-4">{cenario.descricao}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500">{cenario.etapas.filter(e => e.tipo === 'pergunta').length} perguntas</span>
-                      <button
-                        onClick={() => iniciarSimulacao(cenario)}
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      >
-                        Iniciar Simulação
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => iniciarSimulacao(cenario)}
+                      className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Iniciar Simulação
+                    </button>
                   </div>
                 </div>
               ))}
@@ -406,70 +430,113 @@ export default function SimuladorAtendimentoPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-green-600 font-medium">Acertos</p>
+                  <p className="text-sm text-green-600 font-medium">Decisões Corretas</p>
                   <p className="text-3xl font-bold text-green-700">{resultados.acertos}</p>
                 </div>
+                
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-red-600 font-medium">Erros</p>
+                  <p className="text-sm text-red-600 font-medium">Decisões Incorretas</p>
                   <p className="text-3xl font-bold text-red-700">{resultados.erros}</p>
                 </div>
+                
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-blue-600 font-medium">Pontuação</p>
+                  <p className="text-sm text-blue-600 font-medium">Pontuação Total</p>
                   <p className="text-3xl font-bold text-blue-700">{pontos}</p>
                 </div>
               </div>
               
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Desempenho</h3>
-                <div className="h-4 w-full bg-gray-200 rounded-full">
-                  <div 
-                    className="h-4 rounded-full bg-gradient-to-r from-yellow-400 via-green-500 to-green-600" 
-                    style={{ width: `${(resultados.acertos / resultados.total) * 100}%` }}
-                  ></div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-yellow-800">Análise de Desempenho</h3>
                 </div>
-                <p className="mt-2 text-sm text-gray-600">
-                  Taxa de acerto: {Math.round((resultados.acertos / resultados.total) * 100)}%
+                
+                <p className="text-yellow-700">
+                  {pontos >= 40 ? (
+                    "Excelente trabalho! Suas decisões demonstram um ótimo conhecimento sobre atendimento farmacêutico e indicação de medicamentos. Continue aprimorando suas habilidades!"
+                  ) : pontos >= 20 ? (
+                    "Bom trabalho! Você tomou várias decisões corretas, mas ainda há espaço para melhorias. Revise os feedbacks para aprimorar seu conhecimento."
+                  ) : pontos >= 0 ? (
+                    "Você está no caminho certo, mas precisa revisar alguns conceitos importantes sobre atendimento farmacêutico e indicação de medicamentos. Preste atenção aos feedbacks recebidos."
+                  ) : (
+                    "Recomendamos revisar os materiais de treinamento sobre atendimento farmacêutico e indicação de medicamentos. Algumas decisões tomadas podem representar riscos aos pacientes."
+                  )}
                 </p>
               </div>
               
-              {/* Histórico de respostas */}
+              {/* Histórico de decisões */}
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Revisão das respostas</h3>
-                <div className="space-y-4">
-                  {historico.map((item, index) => (
-                    <div 
-                      key={index} 
-                      className={`p-4 rounded-lg border ${
-                        item.correta ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-                      }`}
-                    >
-                      <p className="font-medium text-gray-800 mb-2">{item.pergunta}</p>
-                      <p className="text-gray-700 mb-2">
-                        <span className="font-medium">Sua resposta:</span> {item.resposta}
-                      </p>
-                      <p className={`text-sm ${item.correta ? 'text-green-700' : 'text-red-700'}`}>
-                        {item.feedback}
-                      </p>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Pontos: {item.pontos > 0 ? `+${item.pontos}` : item.pontos}
-                      </p>
-                    </div>
-                  ))}
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Histórico de Decisões</h3>
+                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Situação
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Sua Decisão
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Resultado
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Pontos
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {historico.map((item, index) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {item.etapa}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-500">
+                              {item.resposta}
+                            </td>
+                            <td className="px-6 py-4 text-sm">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                item.correta
+                                  ? 'bg-green-100 text-green-800'
+                                  : 'bg-red-100 text-red-800'
+                              }`}>
+                                {item.correta ? 'Correto' : 'Incorreto'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                              <span className={`font-medium ${
+                                item.pontos > 0
+                                  ? 'text-green-600'
+                                  : item.pontos < 0
+                                  ? 'text-red-600'
+                                  : 'text-gray-600'
+                              }`}>
+                                {item.pontos > 0 ? '+' : ''}{item.pontos}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               
               <div className="flex justify-center space-x-4">
                 <button
                   onClick={reiniciarSimulacao}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Nova Simulação
+                </button>
+                <Link
+                  href="/dashboard"
                   className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Escolher Outro Cenário
-                </button>
-                <Link 
-                  href="/treinamento/flashcards" 
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Estudar Flashcards
+                  Voltar ao Dashboard
                 </Link>
               </div>
             </div>
@@ -477,26 +544,26 @@ export default function SimuladorAtendimentoPage() {
         ) : (
           // Simulação em andamento
           <div className="bg-white shadow rounded-lg overflow-hidden">
+            {/* Cabeçalho do cenário */}
+            <div className="px-4 py-5 sm:px-6 bg-blue-50 border-b border-blue-100">
+              <h2 className="text-xl font-bold text-gray-900">{cenarioAtual.titulo}</h2>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                {cenarioAtual.descricao}
+              </p>
+            </div>
+            
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{cenarioAtual.titulo}</h2>
-              <p className="text-gray-600 mb-6">{cenarioAtual.descricao}</p>
-              
               {/* Etapa atual */}
               <div className="mb-6">
-                {cenarioAtual.etapas[etapaAtual].tipo === 'informacao' ? (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                    <h3 className="text-md font-medium text-blue-800 mb-2">Informação adicional</h3>
-                    <p className="text-gray-700">{cenarioAtual.etapas[etapaAtual].texto}</p>
-                  </div>
-                ) : (
-                  <div>
-                    <h3 className="text-xl font-medium text-gray-900 mb-4">{cenarioAtual.etapas[etapaAtual].texto}</h3>
+                {cenarioAtual.etapas[etapaAtual].tipo === "pergunta" ? (
+                  <>
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">{cenarioAtual.etapas[etapaAtual].texto}</h3>
                     
                     <div className="space-y-3">
                       {cenarioAtual.etapas[etapaAtual].opcoes.map((opcao, index) => (
                         <button
                           key={index}
-                          onClick={() => respostaSelecionada === null && selecionarResposta(index, opcao)}
+                          onClick={() => respostaSelecionada === null && selecionarResposta(opcao, index)}
                           disabled={respostaSelecionada !== null}
                           className={`w-full text-left p-4 rounded-lg border transition-colors ${
                             respostaSelecionada === null
@@ -510,80 +577,86 @@ export default function SimuladorAtendimentoPage() {
                                   : 'border-gray-300 opacity-70'
                           }`}
                         >
-                          <div className="flex items-start">
-                            <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center mr-3 ${
-                              respostaSelecionada === null
-                                ? 'border border-gray-400 text-gray-500'
-                                : respostaSelecionada === index
-                                  ? opcao.correta
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-red-500 text-white'
-                                  : opcao.correta
-                                    ? 'bg-green-500 text-white'
-                                    : 'border border-gray-400 text-gray-500'
-                            }`}>
-                              {String.fromCharCode(65 + index)}
-                            </div>
-                            <span className="text-gray-800">{opcao.texto}</span>
-                          </div>
+                          {opcao.texto}
                         </button>
                       ))}
                     </div>
-                  </div>
-                )}
-                
-                {feedback && (
-                  <div className={`mt-6 p-4 rounded-lg ${
-                    respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
-                      ? 'bg-green-50 border border-green-200'
-                      : 'bg-red-50 border border-red-200'
-                  }`}>
-                    <h4 className={`text-md font-medium ${
-                      respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
-                        ? 'text-green-800'
-                        : 'text-red-800'
-                    } mb-2`}>
-                      {respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
-                        ? 'Correto!'
-                        : 'Incorreto!'}
-                    </h4>
-                    <p className="text-sm text-gray-700">{feedback}</p>
+                  </>
+                ) : (
+                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <p className="text-sm text-yellow-700">
+                          {cenarioAtual.etapas[etapaAtual].texto}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
               
-              {/* Navegação */}
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-gray-500">
-                  Etapa {etapaAtual + 1} de {cenarioAtual.etapas.length}
+              {/* Feedback */}
+              {feedback && (
+                <div className={`p-4 rounded-lg mb-6 ${
+                  respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
+                    ? 'bg-green-50 border border-green-200'
+                    : 'bg-red-50 border border-red-200'
+                }`}>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      {respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta ? (
+                        <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="ml-3">
+                      <h3 className={`text-sm font-medium ${
+                        respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
+                          ? 'text-green-800'
+                          : 'text-red-800'
+                      }`}>
+                        {respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
+                          ? 'Decisão correta!'
+                          : 'Decisão incorreta'
+                        }
+                      </h3>
+                      <div className={`mt-2 text-sm ${
+                        respostaSelecionada !== null && cenarioAtual.etapas[etapaAtual].opcoes[respostaSelecionada].correta
+                          ? 'text-green-700'
+                          : 'text-red-700'
+                      }`}>
+                        <p>{feedback}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  {(respostaSelecionada !== null || cenarioAtual.etapas[etapaAtual].tipo === 'informacao') && (
-                    <button
-                      onClick={proximaEtapa}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      {etapaAtual < cenarioAtual.etapas.length - 1 ? 'Próxima Etapa' : 'Concluir Simulação'}
-                    </button>
-                  )}
-                </div>
+              )}
+              
+              {/* Botão de próxima etapa */}
+              <div className="flex justify-center">
+                <button
+                  onClick={proximaEtapa}
+                  className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                    cenarioAtual.etapas[etapaAtual].tipo === "informacao" || respostaSelecionada !== null
+                      ? ''
+                      : 'opacity-50 cursor-not-allowed'
+                  }`}
+                  disabled={cenarioAtual.etapas[etapaAtual].tipo === "pergunta" && respostaSelecionada === null}
+                >
+                  {etapaAtual < cenarioAtual.etapas.length - 1 ? 'Continuar' : 'Finalizar Simulação'}
+                </button>
               </div>
             </div>
-          </div>
-        )}
-        
-        {/* Dicas para simulação */}
-        {!simulacaoIniciada && (
-          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="text-lg font-medium text-blue-800 mb-2">Dicas para o Simulador de Atendimento</h3>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>• Leia atentamente a descrição do cenário e as informações adicionais</li>
-              <li>• Considere todas as informações fornecidas pelo cliente antes de fazer recomendações</li>
-              <li>• Lembre-se de verificar contraindicações, interações medicamentosas e condições pré-existentes</li>
-              <li>• As orientações não farmacológicas são tão importantes quanto a indicação de medicamentos</li>
-              <li>• Saiba reconhecer os sinais de alerta que exigem encaminhamento médico</li>
-              <li>• Aprenda com os feedbacks para melhorar seu atendimento na prática real</li>
-            </ul>
           </div>
         )}
       </div>

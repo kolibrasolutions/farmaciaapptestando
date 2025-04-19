@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -360,256 +362,27 @@ export default function ConsultaSintomasPage() {
                 {
                   nome: 'Paracetamol 500mg',
                   posologia: '500mg a cada 6 horas, não excedendo 3g por dia.',
-                  observacoes: 'Seguro para diabéticos. Não afeta significativamente a glicemia.'
+                  observacoes: 'Não afeta a glicemia. Seguro para uso em diabéticos.'
                 },
                 {
                   nome: 'Ibuprofeno 400mg',
                   posologia: '400mg a cada 8 horas, após as refeições.',
-                  observacoes: 'Usar com cautela em diabéticos com complicações renais.'
+                  observacoes: 'Monitorar função renal, especialmente em diabéticos com nefropatia.'
                 }
               ],
               naoFarmacologicas: [
-                'Verificar níveis de glicemia, pois hipo ou hiperglicemia podem causar dor de cabeça',
-                'Hidratação adequada',
                 'Repouso em ambiente calmo',
                 'Compressas frias',
-                'Técnicas de relaxamento'
+                'Hidratação adequada (água)',
+                'Monitorar glicemia',
+                'Verificar pressão arterial'
               ],
               sinaisAlerta: [
-                'Dor de cabeça associada a alterações significativas na glicemia',
-                'Dor intensa de início súbito',
-                'Dor acompanhada de alterações visuais (possível retinopatia)',
-                'Dor que não responde a analgésicos',
-                'Dor em paciente com histórico de hipertensão não controlada'
-              ]
-            }
-          }
-        },
-        {
-          id: 4,
-          sintoma: 'Alergia cutânea',
-          categoria: 'dermatologico',
-          descricao: 'Reação alérgica manifestada na pele, podendo incluir vermelhidão, coceira, inchaço ou erupções.',
-          publicos: ['adultos', 'criancas', 'idosos', 'diabeticos'],
-          recomendacoes: {
-            adultos: {
-              medicamentos: [
-                {
-                  nome: 'Loratadina 10mg',
-                  posologia: '10mg uma vez ao dia.',
-                  observacoes: 'Anti-histamínico não sedativo, ideal para uso diurno.'
-                },
-                {
-                  nome: 'Dexclorfeniramina 2mg',
-                  posologia: '2mg a cada 6-8 horas.',
-                  observacoes: 'Anti-histamínico com efeito sedativo, melhor para uso noturno ou quando a coceira interfere no sono.'
-                },
-                {
-                  nome: 'Hidrocortisona creme 1%',
-                  posologia: 'Aplicar uma fina camada nas áreas afetadas 2-3 vezes ao dia por até 7 dias.',
-                  observacoes: 'Corticosteroide tópico de baixa potência para alívio da inflamação e coceira.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Evitar coçar as lesões',
-                'Identificar e evitar o agente causador',
-                'Usar roupas de algodão, soltas e frescas',
-                'Banhos mornos com aveia coloidal',
-                'Manter a pele hidratada com loções sem perfume'
-              ],
-              sinaisAlerta: [
-                'Inchaço dos lábios, língua ou garganta',
-                'Dificuldade para respirar',
-                'Tontura ou desmaio',
-                'Lesões que pioram rapidamente ou se espalham',
-                'Febre ou mal-estar significativo'
-              ]
-            },
-            criancas: {
-              medicamentos: [
-                {
-                  nome: 'Loratadina xarope',
-                  posologia: 'Crianças acima de 2 anos com menos de 30kg: 5mg (5ml) uma vez ao dia. Crianças com mais de 30kg: 10mg (10ml) uma vez ao dia.',
-                  observacoes: 'Anti-histamínico não sedativo, seguro para uso pediátrico acima de 2 anos.'
-                },
-                {
-                  nome: 'Dexclorfeniramina xarope',
-                  posologia: 'Crianças 2-6 anos: 0,5mg (2ml) a cada 6-8 horas. Crianças 6-12 anos: 1mg (4ml) a cada 6-8 horas.',
-                  observacoes: 'Pode causar sonolência. Útil para uso noturno.'
-                },
-                {
-                  nome: 'Hidrocortisona creme 0,5%',
-                  posologia: 'Aplicar uma fina camada nas áreas afetadas 1-2 vezes ao dia por até 5 dias.',
-                  observacoes: 'Usar a menor concentração eficaz pelo menor tempo possível.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Evitar que a criança coce as lesões (cortar as unhas, usar luvas de algodão à noite)',
-                'Banhos mornos com aveia coloidal',
-                'Roupas de algodão',
-                'Identificar e remover possíveis alérgenos',
-                'Manter o ambiente fresco'
-              ],
-              sinaisAlerta: [
-                'Qualquer sinal de dificuldade respiratória',
-                'Inchaço facial',
-                'Lesões que pioram rapidamente',
-                'Febre',
-                'Letargia ou irritabilidade excessiva'
-              ]
-            },
-            idosos: {
-              medicamentos: [
-                {
-                  nome: 'Loratadina 10mg',
-                  posologia: '10mg uma vez ao dia.',
-                  observacoes: 'Preferível por ter menos efeitos anticolinérgicos e sedativos.'
-                },
-                {
-                  nome: 'Hidrocortisona creme 1%',
-                  posologia: 'Aplicar uma fina camada nas áreas afetadas 1-2 vezes ao dia por até 7 dias.',
-                  observacoes: 'Usar com cautela em pele fina ou atrófica. Evitar uso prolongado.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Hidratação intensa da pele com emolientes',
-                'Banhos mornos (não quentes) com produtos suaves',
-                'Evitar sabonetes com perfume',
-                'Roupas de algodão',
-                'Ambiente com umidade adequada'
-              ],
-              sinaisAlerta: [
-                'Qualquer sinal de dificuldade respiratória',
-                'Lesões extensas ou que pioram rapidamente',
-                'Sinais de infecção secundária',
-                'Alteração do estado mental',
-                'Desidratação'
-              ]
-            },
-            diabeticos: {
-              medicamentos: [
-                {
-                  nome: 'Loratadina 10mg',
-                  posologia: '10mg uma vez ao dia.',
-                  observacoes: 'Não afeta significativamente a glicemia.'
-                },
-                {
-                  nome: 'Hidrocortisona creme 1%',
-                  posologia: 'Aplicar uma fina camada nas áreas afetadas 1-2 vezes ao dia por até 5 dias.',
-                  observacoes: 'Uso por áreas limitadas e curto período não afeta significativamente a glicemia, mas monitorar em caso de uso mais extenso.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Cuidado especial com a hidratação da pele, especialmente nas extremidades',
-                'Inspecionar a pele diariamente',
-                'Controle adequado da glicemia',
-                'Evitar coçar para prevenir lesões que podem cicatrizar mal',
-                'Manter boa hidratação oral'
-              ],
-              sinaisAlerta: [
-                'Lesões em áreas de baixa circulação (pés, pernas)',
-                'Sinais de infecção secundária',
-                'Lesões que não melhoram em poucos dias',
                 'Alterações significativas na glicemia',
-                'Qualquer sinal de dificuldade respiratória'
-              ]
-            }
-          }
-        },
-        {
-          id: 5,
-          sintoma: 'Azia e má digestão',
-          categoria: 'digestivo',
-          descricao: 'Sensação de queimação no peito ou garganta, frequentemente acompanhada de desconforto abdominal, eructação ou sensação de plenitude.',
-          publicos: ['adultos', 'idosos', 'diabeticos'],
-          recomendacoes: {
-            adultos: {
-              medicamentos: [
-                {
-                  nome: 'Omeprazol 20mg',
-                  posologia: '20mg uma vez ao dia, 30 minutos antes do café da manhã, por até 14 dias.',
-                  observacoes: 'Inibidor da bomba de prótons. Mais eficaz quando tomado em jejum.'
-                },
-                {
-                  nome: 'Hidróxido de alumínio + hidróxido de magnésio suspensão',
-                  posologia: '10-15ml após as refeições e ao deitar, ou quando necessário para alívio dos sintomas.',
-                  observacoes: 'Antiácido de ação rápida para alívio sintomático. Não usar por mais de 14 dias consecutivos.'
-                },
-                {
-                  nome: 'Simeticona 40mg',
-                  posologia: '40mg após as refeições e ao deitar, até 4 vezes ao dia.',
-                  observacoes: 'Útil quando há distensão abdominal e gases associados.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Evitar alimentos gordurosos, picantes, cítricos, café, álcool e chocolate',
-                'Comer porções menores e mais frequentes',
-                'Não deitar logo após as refeições (aguardar pelo menos 2 horas)',
-                'Elevar a cabeceira da cama 15-20cm',
-                'Evitar roupas apertadas na região abdominal'
-              ],
-              sinaisAlerta: [
-                'Dor torácica intensa que pode irradiar para o braço, pescoço ou mandíbula',
-                'Dificuldade para engolir ou dor ao engolir',
-                'Vômitos persistentes ou com sangue',
-                'Fezes escuras ou com sangue',
-                'Perda de peso não intencional'
-              ]
-            },
-            idosos: {
-              medicamentos: [
-                {
-                  nome: 'Hidróxido de alumínio + hidróxido de magnésio suspensão',
-                  posologia: '5-10ml após as refeições e ao deitar.',
-                  observacoes: 'Preferível iniciar com antiácidos antes de medicamentos sistêmicos. Monitorar função renal em uso prolongado.'
-                },
-                {
-                  nome: 'Omeprazol 20mg',
-                  posologia: '20mg uma vez ao dia, por até 14 dias.',
-                  observacoes: 'Usar com cautela devido ao maior risco de infecções, fraturas e deficiência de vitamina B12 em uso prolongado.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Modificações dietéticas (evitar alimentos desencadeantes)',
-                'Refeições pequenas e frequentes',
-                'Elevação da cabeceira da cama',
-                'Evitar deitar-se nas 2-3 horas após as refeições',
-                'Verificar se medicamentos em uso podem causar ou agravar a azia'
-              ],
-              sinaisAlerta: [
-                'Qualquer dor torácica, mesmo que típica de azia',
-                'Dificuldade para engolir',
-                'Vômitos persistentes',
-                'Perda de peso não intencional',
-                'Anemia (palidez, fadiga)'
-              ]
-            },
-            diabeticos: {
-              medicamentos: [
-                {
-                  nome: 'Omeprazol 20mg',
-                  posologia: '20mg uma vez ao dia, por até 14 dias.',
-                  observacoes: 'Monitorar glicemia, pois pode alterar a absorção de alguns hipoglicemiantes orais.'
-                },
-                {
-                  nome: 'Hidróxido de alumínio + hidróxido de magnésio suspensão sem açúcar',
-                  posologia: '10ml após as refeições e ao deitar.',
-                  observacoes: 'Verificar se a formulação é livre de açúcar.'
-                }
-              ],
-              naoFarmacologicas: [
-                'Controle adequado da glicemia (hiperglicemia pode retardar o esvaziamento gástrico)',
-                'Refeições pequenas e frequentes conforme plano alimentar para diabetes',
-                'Elevação da cabeceira da cama',
-                'Manter peso adequado',
-                'Evitar alimentos desencadeantes'
-              ],
-              sinaisAlerta: [
-                'Dor torácica',
-                'Alterações significativas na glicemia',
-                'Náuseas e vômitos que impedem alimentação adequada',
+                'Dor de cabeça associada a hipertensão',
                 'Sinais de desidratação',
-                'Sintomas que não melhoram após 7 dias de tratamento'
+                'Dor que não responde a analgésicos',
+                'Alterações visuais (podem estar relacionadas a complicações da diabetes)'
               ]
             }
           }
@@ -619,18 +392,13 @@ export default function ConsultaSintomasPage() {
       // Filtrar por termo de busca e/ou categoria
       if (termoBusca) {
         const termoBuscaLower = termoBusca.toLowerCase();
-        resultadosSimulados = sintomasDB.filter(item => 
-          item.sintoma.toLowerCase().includes(termoBuscaLower) || 
-          item.descricao.toLowerCase().includes(termoBuscaLower)
+        resultadosSimulados = sintomasDB.filter(sintoma => 
+          sintoma.sintoma.toLowerCase().includes(termoBuscaLower) || 
+          sintoma.descricao.toLowerCase().includes(termoBuscaLower)
         );
       } else if (categoriaSelecionada) {
-        resultadosSimulados = sintomasDB.filter(item => item.categoria === categoriaSelecionada);
+        resultadosSimulados = sintomasDB.filter(sintoma => sintoma.categoria === categoriaSelecionada);
       }
-      
-      // Filtrar por público
-      resultadosSimulados = resultadosSimulados.filter(item => 
-        item.publicos.includes(filtroPublico)
-      );
       
       // Adicionar ao histórico de buscas
       if (termoBusca && !historicoBuscas.includes(termoBusca)) {
@@ -659,9 +427,9 @@ export default function ConsultaSintomasPage() {
         {/* Cabeçalho */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Consulta por Sintomas</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Consulta de Sintomas</h1>
             <p className="mt-1 text-sm text-gray-500">
-              Pesquise recomendações farmacêuticas para sintomas e condições comuns
+              Pesquise recomendações para sintomas comuns
             </p>
           </div>
           <Link href="/dashboard" className="text-blue-600 hover:text-blue-800 font-medium">
@@ -674,7 +442,7 @@ export default function ConsultaSintomasPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="md:col-span-2">
               <label htmlFor="termo-busca" className="block text-sm font-medium text-gray-700 mb-1">
-                Buscar por sintoma ou condição
+                Buscar por sintoma ou descrição
               </label>
               <div className="mt-1 flex rounded-md shadow-sm">
                 <input
@@ -684,7 +452,7 @@ export default function ConsultaSintomasPage() {
                   value={termoBusca}
                   onChange={(e) => setTermoBusca(e.target.value)}
                   className="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300"
-                  placeholder="Ex: Tosse, dor de cabeça, alergia..."
+                  placeholder="Ex: Tosse, dor de cabeça, febre..."
                 />
                 <button
                   onClick={buscarSintomas}
@@ -728,9 +496,6 @@ export default function ConsultaSintomasPage() {
                 onChange={(e) => {
                   setCategoriaSelecionada(e.target.value);
                   setTermoBusca('');
-                  if (e.target.value) {
-                    setTimeout(() => buscarSintomas(), 100);
-                  }
                 }}
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
               >
@@ -741,66 +506,12 @@ export default function ConsultaSintomasPage() {
                   </option>
                 ))}
               </select>
-            </div>
-          </div>
-          
-          {/* Filtro de público */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Público-alvo
-            </label>
-            <div className="flex flex-wrap gap-2">
+              
               <button
-                onClick={() => {
-                  setFiltroPublico('adultos');
-                  if (buscaRealizada) buscarSintomas();
-                }}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                  filtroPublico === 'adultos' 
-                    ? 'bg-blue-100 text-blue-800 border border-blue-300' 
-                    : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
-                }`}
+                onClick={buscarSintomas}
+                className="mt-3 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Adultos
-              </button>
-              <button
-                onClick={() => {
-                  setFiltroPublico('criancas');
-                  if (buscaRealizada) buscarSintomas();
-                }}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                  filtroPublico === 'criancas' 
-                    ? 'bg-green-100 text-green-800 border border-green-300' 
-                    : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
-                }`}
-              >
-                Crianças
-              </button>
-              <button
-                onClick={() => {
-                  setFiltroPublico('idosos');
-                  if (buscaRealizada) buscarSintomas();
-                }}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                  filtroPublico === 'idosos' 
-                    ? 'bg-purple-100 text-purple-800 border border-purple-300' 
-                    : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
-                }`}
-              >
-                Idosos
-              </button>
-              <button
-                onClick={() => {
-                  setFiltroPublico('diabeticos');
-                  if (buscaRealizada) buscarSintomas();
-                }}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                  filtroPublico === 'diabeticos' 
-                    ? 'bg-orange-100 text-orange-800 border border-orange-300' 
-                    : 'bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200'
-                }`}
-              >
-                Diabéticos
+                Filtrar
               </button>
             </div>
           </div>
@@ -808,71 +519,105 @@ export default function ConsultaSintomasPage() {
         
         {/* Detalhes do sintoma selecionado */}
         {sintomaSelecionado && (
-          <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
-            <div className="px-4 py-5 sm:px-6 flex justify-between items-center bg-blue-50 border-b border-blue-100">
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">{sintomaSelecionado.sintoma}</h2>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  {sintomaSelecionado.descricao}
+                <h2 className="text-2xl font-bold text-gray-900">{sintomaSelecionado.sintoma}</h2>
+                <p className="text-sm text-gray-500">
+                  {categorias.find(c => c.id === sintomaSelecionado.categoria)?.nome}
                 </p>
               </div>
               <button
                 onClick={limparSelecao}
-                className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="text-gray-400 hover:text-gray-500"
               >
-                Voltar aos resultados
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
             
-            <div className="border-t border-gray-200">
-              <dl>
-                <div className="bg-gray-50 px-4 py-5 sm:px-6">
-                  <dt className="text-lg font-medium text-gray-900 mb-2">
-                    Medicamentos Recomendados
-                  </dt>
-                  <dd className="mt-1">
-                    <ul className="divide-y divide-gray-200 border border-gray-200 rounded-md">
-                      {sintomaSelecionado.recomendacoes[filtroPublico].medicamentos.map((medicamento, index) => (
-                        <li key={index} className="px-4 py-3">
-                          <div className="font-medium text-blue-600">{medicamento.nome}</div>
-                          <div className="text-sm text-gray-700 mt-1">
-                            <span className="font-medium">Posologia:</span> {medicamento.posologia}
-                          </div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            <span className="font-medium">Observações:</span> {medicamento.observacoes}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </dd>
+            <p className="text-gray-700 mb-6">{sintomaSelecionado.descricao}</p>
+            
+            {/* Seleção de público */}
+            <div className="mb-6">
+              <label htmlFor="filtro-publico" className="block text-sm font-medium text-gray-700 mb-2">
+                Selecione o público para recomendações específicas:
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {sintomaSelecionado.publicos.map((publico) => (
+                  <button
+                    key={publico}
+                    onClick={() => setFiltroPublico(publico)}
+                    className={`px-4 py-2 rounded-md text-sm font-medium ${
+                      filtroPublico === publico
+                        ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                        : 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
+                    }`}
+                  >
+                    {publico === 'adultos' && 'Adultos'}
+                    {publico === 'criancas' && 'Crianças'}
+                    {publico === 'idosos' && 'Idosos'}
+                    {publico === 'diabeticos' && 'Diabéticos'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Recomendações para o público selecionado */}
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Recomendações para {filtroPublico === 'adultos' ? 'Adultos' : 
+                                   filtroPublico === 'criancas' ? 'Crianças' : 
+                                   filtroPublico === 'idosos' ? 'Idosos' : 'Diabéticos'}
+              </h3>
+              
+              {/* Medicamentos */}
+              <div className="mb-6">
+                <h4 className="text-md font-medium text-gray-800 mb-2">Medicamentos recomendados:</h4>
+                <div className="bg-blue-50 rounded-lg p-4">
+                  {sintomaSelecionado.recomendacoes[filtroPublico].medicamentos.map((med, index) => (
+                    <div key={index} className={index > 0 ? 'mt-4 pt-4 border-t border-blue-200' : ''}>
+                      <p className="font-medium text-blue-800">{med.nome}</p>
+                      <p className="text-sm text-blue-700 mt-1"><span className="font-medium">Posologia:</span> {med.posologia}</p>
+                      <p className="text-sm text-blue-700 mt-1"><span className="font-medium">Observações:</span> {med.observacoes}</p>
+                    </div>
+                  ))}
                 </div>
-                
-                <div className="bg-white px-4 py-5 sm:px-6">
-                  <dt className="text-lg font-medium text-gray-900 mb-2">
-                    Orientações Não Farmacológicas
-                  </dt>
-                  <dd className="mt-1">
-                    <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                      {sintomaSelecionado.recomendacoes[filtroPublico].naoFarmacologicas.map((orientacao, index) => (
-                        <li key={index}>{orientacao}</li>
-                      ))}
-                    </ul>
-                  </dd>
+              </div>
+              
+              {/* Medidas não farmacológicas */}
+              <div className="mb-6">
+                <h4 className="text-md font-medium text-gray-800 mb-2">Medidas não farmacológicas:</h4>
+                <div className="bg-green-50 rounded-lg p-4">
+                  <ul className="list-disc pl-5 space-y-1 text-green-800">
+                    {sintomaSelecionado.recomendacoes[filtroPublico].naoFarmacologicas.map((medida, index) => (
+                      <li key={index}>{medida}</li>
+                    ))}
+                  </ul>
                 </div>
-                
-                <div className="bg-red-50 px-4 py-5 sm:px-6">
-                  <dt className="text-lg font-medium text-red-800 mb-2">
-                    Sinais de Alerta (Encaminhar ao Médico)
-                  </dt>
-                  <dd className="mt-1">
-                    <ul className="list-disc pl-5 space-y-1 text-red-700">
-                      {sintomaSelecionado.recomendacoes[filtroPublico].sinaisAlerta.map((sinal, index) => (
-                        <li key={index}>{sinal}</li>
-                      ))}
-                    </ul>
-                  </dd>
+              </div>
+              
+              {/* Sinais de alerta */}
+              <div>
+                <h4 className="text-md font-medium text-gray-800 mb-2">Sinais de alerta (buscar atendimento médico):</h4>
+                <div className="bg-red-50 rounded-lg p-4">
+                  <ul className="list-disc pl-5 space-y-1 text-red-800">
+                    {sintomaSelecionado.recomendacoes[filtroPublico].sinaisAlerta.map((sinal, index) => (
+                      <li key={index}>{sinal}</li>
+                    ))}
+                  </ul>
                 </div>
-              </dl>
+              </div>
+            </div>
+            
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={limparSelecao}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Voltar para resultados
+              </button>
             </div>
           </div>
         )}
@@ -881,81 +626,89 @@ export default function ConsultaSintomasPage() {
         {!sintomaSelecionado && (
           <>
             {carregando ? (
-              <div className="flex justify-center items-center h-64">
+              <div className="bg-white shadow rounded-lg p-6 flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                 <p className="ml-4 text-gray-700">Buscando sintomas...</p>
               </div>
             ) : buscaRealizada ? (
-              resultados.length > 0 ? (
-                <div className="bg-white shadow overflow-hidden sm:rounded-md">
+              <div className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Resultados da busca
+                  </h3>
+                  <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                    {resultados.length} sintomas encontrados
+                  </p>
+                </div>
+                
+                {resultados.length > 0 ? (
                   <ul className="divide-y divide-gray-200">
                     {resultados.map((sintoma) => (
-                      <li key={sintoma.id}>
-                        <button
-                          onClick={() => selecionarSintoma(sintoma)}
-                          className="block hover:bg-gray-50 w-full text-left"
-                        >
-                          <div className="px-4 py-4 sm:px-6">
-                            <div className="flex items-center justify-between">
-                              <p className="text-lg font-medium text-blue-600 truncate">
-                                {sintoma.sintoma}
-                              </p>
-                              <div className="ml-2 flex-shrink-0 flex">
-                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                  {categorias.find(cat => cat.id === sintoma.categoria)?.nome || sintoma.categoria}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="mt-2">
-                              <p className="text-sm text-gray-500">
-                                {sintoma.descricao}
-                              </p>
-                            </div>
-                            <div className="mt-2 flex items-center text-sm text-gray-500">
-                              <p>
-                                {sintoma.recomendacoes[filtroPublico].medicamentos.length} medicamentos recomendados
-                              </p>
+                      <li key={sintoma.id} className="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="text-lg font-medium text-blue-600">{sintoma.sintoma}</h4>
+                            <p className="mt-1 text-sm text-gray-600">
+                              {sintoma.descricao}
+                            </p>
+                            <p className="mt-2 text-sm text-gray-500">
+                              <span className="font-medium">Categoria:</span> {categorias.find(c => c.id === sintoma.categoria)?.nome}
+                            </p>
+                            <div className="mt-2 flex flex-wrap gap-1">
+                              {sintoma.publicos.map((publico) => (
+                                <span 
+                                  key={publico}
+                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                >
+                                  {publico === 'adultos' && 'Adultos'}
+                                  {publico === 'criancas' && 'Crianças'}
+                                  {publico === 'idosos' && 'Idosos'}
+                                  {publico === 'diabeticos' && 'Diabéticos'}
+                                </span>
+                              ))}
                             </div>
                           </div>
-                        </button>
+                          <button
+                            onClick={() => selecionarSintoma(sintoma)}
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          >
+                            Ver recomendações
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) : (
-                <div className="bg-white shadow rounded-lg p-8 text-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum resultado encontrado</h3>
-                  <p className="text-gray-500 mb-6">
-                    Tente buscar com outros termos, selecionar uma categoria diferente ou mudar o público-alvo.
-                  </p>
-                </div>
-              )
+                ) : (
+                  <div className="px-4 py-12 sm:px-6 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">Nenhum sintoma encontrado</h3>
+                    <p className="text-gray-500 mb-4">Tente buscar com outros termos ou selecione uma categoria diferente.</p>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="bg-white shadow rounded-lg p-8 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-white shadow rounded-lg p-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Busque por sintomas ou condições</h3>
-                <p className="text-gray-500 mb-6">
-                  Digite o sintoma ou condição, ou selecione uma categoria para começar. Você também pode filtrar por público-alvo.
-                </p>
+                <h3 className="text-lg font-medium text-gray-900 mb-1">Busque um sintoma</h3>
+                <p className="text-gray-500 mb-4">Digite o sintoma ou selecione uma categoria para começar.</p>
               </div>
             )}
           </>
         )}
         
         {/* Informações adicionais */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-800 mb-2">Informações importantes</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• As informações disponíveis nesta consulta são apenas para referência e não substituem a orientação profissional</li>
-            <li>• Sempre avalie cada caso individualmente, considerando o histórico completo do paciente</li>
-            <li>• Verifique contraindicações, interações medicamentosas e condições pré-existentes</li>
-            <li>• Esteja atento aos sinais de alerta que exigem encaminhamento médico</li>
-            <li>• Em caso de dúvida, consulte o farmacêutico responsável ou encaminhe o paciente ao médico</li>
+        <div className="mt-8 bg-blue-50 border border-blue-100 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-blue-900 mb-2">Informações importantes</h3>
+          <ul className="text-blue-800 space-y-2">
+            <li>• As recomendações disponibilizadas são apenas para referência e não substituem a orientação de um profissional de saúde.</li>
+            <li>• Em caso de sintomas graves ou persistentes, procure atendimento médico imediatamente.</li>
+            <li>• As recomendações são para condições leves e autolimitadas.</li>
+            <li>• Sempre verifique a bula dos medicamentos para informações completas e atualizadas.</li>
+            <li>• Em caso de dúvidas ou reações adversas, consulte um farmacêutico ou médico.</li>
           </ul>
         </div>
       </div>

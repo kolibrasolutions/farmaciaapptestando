@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -350,156 +352,171 @@ export default function QuizPage() {
                   <p className="text-sm text-green-600 font-medium">Acertos</p>
                   <p className="text-3xl font-bold text-green-700">{resultados.acertos}</p>
                 </div>
+                
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
                   <p className="text-sm text-red-600 font-medium">Erros</p>
                   <p className="text-3xl font-bold text-red-700">{resultados.erros}</p>
                 </div>
+                
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                  <p className="text-sm text-blue-600 font-medium">Pontuação</p>
+                  <p className="text-sm text-blue-600 font-medium">Pontuação Total</p>
                   <p className="text-3xl font-bold text-blue-700">{pontos}</p>
                 </div>
               </div>
               
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Desempenho</h3>
-                <div className="h-4 w-full bg-gray-200 rounded-full">
-                  <div 
-                    className="h-4 rounded-full bg-gradient-to-r from-yellow-400 via-green-500 to-green-600" 
-                    style={{ width: `${(resultados.acertos / resultados.total) * 100}%` }}
-                  ></div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-yellow-800">Análise de Desempenho</h3>
                 </div>
-                <p className="mt-2 text-sm text-gray-600">
-                  Taxa de acerto: {Math.round((resultados.acertos / resultados.total) * 100)}%
+                
+                <p className="text-yellow-700">
+                  {resultados.acertos === perguntas.length ? (
+                    "Parabéns! Você acertou todas as perguntas. Seu conhecimento sobre esta categoria é excelente!"
+                  ) : resultados.acertos >= perguntas.length * 0.7 ? (
+                    "Bom trabalho! Você demonstrou um bom conhecimento sobre esta categoria. Continue estudando para aprimorar ainda mais."
+                  ) : resultados.acertos >= perguntas.length * 0.5 ? (
+                    "Você está no caminho certo, mas ainda há espaço para melhorias. Recomendamos revisar os tópicos desta categoria."
+                  ) : (
+                    "Recomendamos dedicar mais tempo ao estudo desta categoria. Revise os materiais de treinamento e tente novamente."
+                  )}
                 </p>
               </div>
               
               <div className="flex justify-center space-x-4">
                 <button
                   onClick={reiniciarQuiz}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Novo Quiz
                 </button>
-                <Link 
-                  href="/treinamento/flashcards" 
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Estudar Flashcards
+                  Voltar ao Dashboard
                 </Link>
               </div>
             </div>
           </div>
         ) : (
           // Quiz em andamento
-          <>
-            {/* Progresso */}
-            <div className="bg-white shadow rounded-lg p-4 mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center">
-                  <span className="text-sm font-medium text-gray-700">
-                    Pergunta {indiceAtual + 1} de {perguntas.length}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                  </svg>
-                  <span className={`text-sm font-medium ${
-                    tempoRestante > 10 ? 'text-gray-700' : 'text-red-600'
-                  }`}>
-                    {tempoRestante} segundos
-                  </span>
-                </div>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progresso}%` }}></div>
-              </div>
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            {/* Barra de progresso */}
+            <div className="w-full bg-gray-200 h-2">
+              <div className="bg-blue-600 h-2" style={{ width: `${progresso}%` }}></div>
             </div>
             
-            {/* Pergunta atual */}
-            {perguntaAtual && (
-              <div className="bg-white shadow rounded-lg overflow-hidden mb-6">
-                <div className="p-6">
-                  <h3 className="text-xl font-medium text-gray-900 mb-6">{perguntaAtual.pergunta}</h3>
-                  
-                  <div className="space-y-3">
-                    {perguntaAtual.opcoes.map((opcao, index) => (
-                      <button
-                        key={index}
-                        onClick={() => respostaSelecionada === null && verificarResposta(index)}
-                        disabled={respostaSelecionada !== null}
-                        className={`w-full text-left p-4 rounded-lg border transition-colors ${
-                          respostaSelecionada === null
-                            ? 'border-gray-300 hover:bg-gray-50'
-                            : respostaSelecionada === index
-                              ? index === perguntaAtual.resposta_correta
-                                ? 'bg-green-100 border-green-500'
-                                : 'bg-red-100 border-red-500'
-                              : index === perguntaAtual.resposta_correta
-                                ? 'bg-green-100 border-green-500'
-                                : 'border-gray-300 opacity-70'
-                        }`}
-                      >
-                        <div className="flex items-start">
-                          <div className={`flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center mr-3 ${
-                            respostaSelecionada === null
-                              ? 'border border-gray-400 text-gray-500'
-                              : respostaSelecionada === index
-                                ? index === perguntaAtual.resposta_correta
-                                  ? 'bg-green-500 text-white'
-                                  : 'bg-red-500 text-white'
-                                : index === perguntaAtual.resposta_correta
-                                  ? 'bg-green-500 text-white'
-                                  : 'border border-gray-400 text-gray-500'
-                          }`}>
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <span className="text-gray-800">{opcao}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {respostaSelecionada !== null && (
-                    <div className={`mt-6 p-4 rounded-lg ${
-                      respostaCorreta ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-                    }`}>
-                      <h4 className={`text-md font-medium ${
-                        respostaCorreta ? 'text-green-800' : 'text-red-800'
-                      } mb-2`}>
-                        {respostaCorreta ? 'Correto!' : 'Incorreto!'}
-                      </h4>
-                      <p className="text-sm text-gray-700">{perguntaAtual.explicacao}</p>
-                    </div>
-                  )}
+            <div className="p-6">
+              {/* Timer */}
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-sm text-gray-500">
+                  Pergunta {indiceAtual + 1} de {perguntas.length}
                 </div>
-                
-                <div className="bg-gray-50 px-6 py-3 flex justify-end">
-                  {respostaSelecionada !== null && (
-                    <button
-                      onClick={proximaPergunta}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      {indiceAtual < perguntas.length - 1 ? 'Próxima Pergunta' : 'Ver Resultados'}
-                    </button>
-                  )}
+                <div className={`px-3 py-1 rounded-full flex items-center ${
+                  tempoRestante > 10 ? 'bg-green-100 text-green-800' : 
+                  tempoRestante > 5 ? 'bg-yellow-100 text-yellow-800' : 
+                  'bg-red-100 text-red-800'
+                }`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="font-medium">{tempoRestante}s</span>
                 </div>
               </div>
-            )}
-          </>
-        )}
-        
-        {/* Dicas para o quiz */}
-        {!quizIniciado && (
-          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="text-lg font-medium text-blue-800 mb-2">Dicas para o Quiz</h3>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>• Leia atentamente cada pergunta e todas as opções antes de responder</li>
-              <li>• Fique atento ao tempo - respostas mais rápidas garantem mais pontos</li>
-              <li>• Mesmo que não tenha certeza, tente responder com base no seu conhecimento</li>
-              <li>• Aprenda com as explicações após cada resposta</li>
-              <li>• Pratique regularmente para melhorar seu desempenho e conhecimento</li>
-            </ul>
+              
+              {/* Pergunta */}
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{perguntaAtual.pergunta}</h2>
+                
+                <div className="space-y-3">
+                  {perguntaAtual.opcoes.map((opcao, index) => (
+                    <button
+                      key={index}
+                      onClick={() => respostaSelecionada === null && verificarResposta(index)}
+                      disabled={respostaSelecionada !== null}
+                      className={`w-full text-left p-4 rounded-lg border transition-colors ${
+                        respostaSelecionada === null
+                          ? 'border-gray-300 hover:bg-gray-50'
+                          : respostaSelecionada === index
+                            ? index === perguntaAtual.resposta_correta
+                              ? 'bg-green-100 border-green-500'
+                              : 'bg-red-100 border-red-500'
+                            : index === perguntaAtual.resposta_correta
+                              ? 'bg-green-100 border-green-500'
+                              : 'border-gray-300 opacity-70'
+                      }`}
+                    >
+                      <div className="flex items-start">
+                        <div className={`flex-shrink-0 h-5 w-5 rounded-full flex items-center justify-center mr-2 ${
+                          respostaSelecionada === null
+                            ? 'bg-gray-200 text-gray-700'
+                            : respostaSelecionada === index
+                              ? index === perguntaAtual.resposta_correta
+                                ? 'bg-green-500 text-white'
+                                : 'bg-red-500 text-white'
+                              : index === perguntaAtual.resposta_correta
+                                ? 'bg-green-500 text-white'
+                                : 'bg-gray-200 text-gray-700'
+                        }`}>
+                          {String.fromCharCode(65 + index)}
+                        </div>
+                        <span className={`${
+                          respostaSelecionada !== null && index === perguntaAtual.resposta_correta
+                            ? 'font-medium'
+                            : ''
+                        }`}>
+                          {opcao}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Explicação da resposta */}
+              {respostaSelecionada !== null && (
+                <div className={`p-4 rounded-lg mb-6 ${
+                  respostaCorreta ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+                }`}>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      {respostaCorreta ? (
+                        <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="ml-3">
+                      <h3 className={`text-sm font-medium ${respostaCorreta ? 'text-green-800' : 'text-red-800'}`}>
+                        {respostaCorreta ? 'Resposta correta!' : 'Resposta incorreta'}
+                      </h3>
+                      <div className={`mt-2 text-sm ${respostaCorreta ? 'text-green-700' : 'text-red-700'}`}>
+                        <p>{perguntaAtual.explicacao}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Botão de próxima pergunta */}
+              {respostaSelecionada !== null && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={proximaPergunta}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    {indiceAtual < perguntas.length - 1 ? 'Próxima Pergunta' : 'Ver Resultados'}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

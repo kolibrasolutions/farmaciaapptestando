@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from 'react';
 import Link from 'next/link';
-import AdminLayout from '../../../../components/AdminLayout';
+import AdminLayout from '../../../../../components/AdminLayout';
 
 export default function NovoUsuarioPage() {
   // Estados para o formulário

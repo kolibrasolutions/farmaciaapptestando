@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -290,12 +292,9 @@ export default function FlashcardsPage() {
               
               {flashcards.length > 0 && (
                 <div className="mt-4">
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>Progresso</span>
-                    <span>{Math.round(progresso)}%</span>
-                  </div>
-                  <div className="mt-1 w-full bg-gray-200 rounded-full h-2.5">
-                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progresso}%` }}></div>
+                  <div className="flex justify-between items-center text-sm text-gray-500">
+                    <span>{flashcards.length} flashcards nesta categoria</span>
+                    <span>{flashcards.filter(f => f.visto).length} já estudados</span>
                   </div>
                 </div>
               )}
@@ -303,136 +302,147 @@ export default function FlashcardsPage() {
           )}
         </div>
         
-        {/* Área de flashcards */}
-        {categoriaSelecionada ? (
-          flashcardAtual ? (
-            <div className="bg-white shadow rounded-lg overflow-hidden">
-              {/* Flashcard */}
-              <div className="min-h-[400px] p-6 flex flex-col">
-                <div className="flex-1">
-                  {!mostrarResposta ? (
-                    <div className="h-full flex flex-col justify-center items-center">
-                      <h3 className="text-xl font-medium text-gray-900 mb-6">Queixa do paciente:</h3>
-                      <div className="text-center max-w-2xl mx-auto">
-                        <p className="text-2xl text-gray-700">{flashcardAtual.frente}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <h3 className="text-xl font-medium text-gray-900 mb-4">Recomendação farmacêutica:</h3>
-                      <div className="prose max-w-none">
-                        <p className="whitespace-pre-line">{flashcardAtual.verso}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {!mostrarResposta ? (
-                  <div className="mt-6 flex justify-center">
-                    <button
-                      onClick={() => setMostrarResposta(true)}
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      Mostrar Recomendação
-                    </button>
-                  </div>
-                ) : (
-                  <div className="mt-6">
-                    <p className="text-sm text-gray-500 mb-2">Como foi sua resposta?</p>
-                    <div className="flex space-x-4">
-                      <button
-                        onClick={() => marcarDificuldade('facil')}
-                        className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                      >
-                        Fácil
-                      </button>
-                      <button
-                        onClick={() => marcarDificuldade('media')}
-                        className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                      >
-                        Médio
-                      </button>
-                      <button
-                        onClick={() => marcarDificuldade('dificil')}
-                        className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                      >
-                        Difícil
-                      </button>
-                    </div>
-                  </div>
+        {/* Área de estudo */}
+        {categoriaSelecionada && flashcardAtual ? (
+          <div className="bg-white shadow rounded-lg overflow-hidden">
+            {/* Barra de progresso */}
+            <div className="w-full bg-gray-200 h-2">
+              <div 
+                className="bg-blue-500 h-2 transition-all duration-300"
+                style={{ width: `${progresso}%` }}
+              ></div>
+            </div>
+            
+            {/* Conteúdo do flashcard */}
+            <div className="p-6">
+              <div className="mb-4 flex justify-between items-center">
+                <span className="text-sm text-gray-500">
+                  Flashcard {flashcards.findIndex(f => f.id === flashcardAtual.id) + 1} de {flashcards.length}
+                </span>
+                {flashcardAtual.visto && (
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    flashcardAtual.dificuldade === 'facil' 
+                      ? 'bg-green-100 text-green-800' 
+                      : flashcardAtual.dificuldade === 'media'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {flashcardAtual.dificuldade === 'facil' && 'Fácil'}
+                    {flashcardAtual.dificuldade === 'media' && 'Médio'}
+                    {flashcardAtual.dificuldade === 'dificil' && 'Difícil'}
+                  </span>
                 )}
               </div>
               
-              {/* Navegação entre flashcards */}
-              <div className="bg-gray-50 px-6 py-3 flex justify-between">
-                <button
-                  onClick={flashcardAnterior}
-                  disabled={flashcards.findIndex(f => f.id === flashcardAtual.id) === 0}
-                  className={`inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md ${
-                    flashcards.findIndex(f => f.id === flashcardAtual.id) === 0
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-                >
-                  Anterior
-                </button>
-                <div className="text-sm text-gray-500">
-                  {flashcards.findIndex(f => f.id === flashcardAtual.id) + 1} de {flashcards.length}
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-medium text-blue-900 mb-2">Pergunta:</h3>
+                <p className="text-blue-800">{flashcardAtual.frente}</p>
+              </div>
+              
+              {mostrarResposta ? (
+                <div className="bg-green-50 border border-green-100 rounded-lg p-6 mb-6">
+                  <h3 className="text-lg font-medium text-green-900 mb-2">Resposta:</h3>
+                  <div className="text-green-800 whitespace-pre-line">{flashcardAtual.verso}</div>
                 </div>
-                <button
-                  onClick={proximoFlashcard}
-                  disabled={flashcards.findIndex(f => f.id === flashcardAtual.id) === flashcards.length - 1 && mostrarResposta === false}
-                  className={`inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md ${
-                    flashcards.findIndex(f => f.id === flashcardAtual.id) === flashcards.length - 1 && mostrarResposta === false
-                      ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'border-transparent bg-blue-600 text-white hover:bg-blue-700'
-                  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-                >
-                  {mostrarResposta ? 'Pular' : 'Próximo'}
-                </button>
+              ) : (
+                <div className="flex justify-center mb-6">
+                  <button
+                    onClick={() => setMostrarResposta(true)}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Mostrar Resposta
+                  </button>
+                </div>
+              )}
+              
+              {/* Botões de navegação e avaliação */}
+              <div className="flex flex-col sm:flex-row justify-between">
+                <div className="flex space-x-2 mb-4 sm:mb-0">
+                  <button
+                    onClick={flashcardAnterior}
+                    disabled={flashcards.findIndex(f => f.id === flashcardAtual.id) === 0}
+                    className={`px-4 py-2 border rounded-md text-sm font-medium ${
+                      flashcards.findIndex(f => f.id === flashcardAtual.id) === 0
+                        ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Anterior
+                  </button>
+                  <button
+                    onClick={proximoFlashcard}
+                    disabled={flashcards.findIndex(f => f.id === flashcardAtual.id) === flashcards.length - 1}
+                    className={`px-4 py-2 border rounded-md text-sm font-medium ${
+                      flashcards.findIndex(f => f.id === flashcardAtual.id) === flashcards.length - 1
+                        ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Próximo
+                  </button>
+                </div>
+                
+                {mostrarResposta && (
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => marcarDificuldade('facil')}
+                      className="px-4 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100"
+                    >
+                      Fácil
+                    </button>
+                    <button
+                      onClick={() => marcarDificuldade('media')}
+                      className="px-4 py-2 border border-yellow-300 rounded-md text-sm font-medium text-yellow-700 bg-yellow-50 hover:bg-yellow-100"
+                    >
+                      Médio
+                    </button>
+                    <button
+                      onClick={() => marcarDificuldade('dificil')}
+                      className="px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100"
+                    >
+                      Difícil
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-          ) : (
-            <div className="bg-white shadow rounded-lg p-8 text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum flashcard encontrado</h3>
-              <p className="text-gray-500 mb-6">
-                Não há flashcards disponíveis para os filtros selecionados.
-              </p>
-              <button
-                onClick={() => {
-                  setModoEstudo('todos');
-                  filtrarFlashcards();
-                }}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Ver todos os flashcards
-              </button>
-            </div>
-          )
-        ) : (
-          <div className="bg-white shadow rounded-lg p-8 text-center">
+          </div>
+        ) : categoriaSelecionada ? (
+          <div className="bg-white shadow rounded-lg p-6 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Selecione uma categoria para começar</h3>
-            <p className="text-gray-500">
-              Escolha uma categoria de flashcards acima para iniciar seu estudo.
-            </p>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">Nenhum flashcard encontrado</h3>
+            <p className="text-gray-500 mb-4">Não há flashcards disponíveis com os filtros selecionados.</p>
+            <button
+              onClick={() => {
+                setModoEstudo('todos');
+                filtrarFlashcards();
+              }}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Mostrar todos os flashcards
+            </button>
+          </div>
+        ) : (
+          <div className="bg-white shadow rounded-lg p-6 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">Selecione uma categoria para começar</h3>
+            <p className="text-gray-500">Escolha uma das categorias acima para ver os flashcards disponíveis.</p>
           </div>
         )}
         
         {/* Dicas de estudo */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-800 mb-2">Dicas para um estudo eficiente</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• Estude regularmente por períodos curtos em vez de sessões longas e esporádicas</li>
-            <li>• Classifique os flashcards por dificuldade para revisar com mais frequência os mais difíceis</li>
-            <li>• Tente responder em voz alta antes de ver a resposta para melhorar a memorização</li>
-            <li>• Relacione as informações com casos reais que você já atendeu na farmácia</li>
-            <li>• Use o sistema de gamificação para se manter motivado e acompanhar seu progresso</li>
+        <div className="mt-8 bg-blue-50 border border-blue-100 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-blue-900 mb-2">Dicas de estudo</h3>
+          <ul className="text-blue-800 space-y-2">
+            <li>• Estude regularmente, em sessões curtas e frequentes para melhor retenção.</li>
+            <li>• Tente responder em voz alta antes de ver a resposta para praticar a comunicação.</li>
+            <li>• Marque os flashcards como "Difícil" para revisá-los com mais frequência.</li>
+            <li>• Aplique o conhecimento em situações práticas, simulando atendimentos.</li>
+            <li>• Revise os flashcards difíceis antes de dormir para melhor memorização.</li>
           </ul>
         </div>
       </div>

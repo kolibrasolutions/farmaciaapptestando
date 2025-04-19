@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from 'react';
 import { PDFExporter } from '../components/PDFExporter';
 
@@ -282,76 +284,15 @@ export default function RelatorioPDFPage() {
                       <span className="text-red-600 dark:text-red-400 font-medium">3</span>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      16/04/2025
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300">
-                        Simulador
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      Problemas Dermatológicos
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                      150 pts
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <span className="text-green-600 dark:text-green-400 font-medium">8</span>
-                      {' / '}
-                      <span className="text-red-600 dark:text-red-400 font-medium">2</span>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
           
-          {/* Recomendações */}
-          <div className="p-6">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Recomendações Personalizadas</h3>
-            
-            <div className="space-y-4">
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <h4 className="text-md font-medium text-blue-800 dark:text-blue-300 mb-2">Foco em Áreas de Melhoria</h4>
-                <p className="text-sm text-blue-700 dark:text-blue-400">
-                  Recomendamos focar o estudo nas categorias com menor desempenho: 
-                  <strong> Problemas Oftálmicos</strong>, 
-                  <strong> Problemas Musculoesqueléticos</strong> e 
-                  <strong> Problemas Bucais</strong>. 
-                  Dedique pelo menos 30 minutos diários a estas áreas.
-                </p>
-              </div>
-              
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                <h4 className="text-md font-medium text-green-800 dark:text-green-300 mb-2">Revisão Espaçada</h4>
-                <p className="text-sm text-green-700 dark:text-green-400">
-                  Para consolidar o conhecimento nas áreas fortes (Dores, Problemas Respiratórios e Dermatológicos), 
-                  recomendamos revisões semanais usando o modo de estudo espaçado. 
-                  Isso ajudará a manter o alto desempenho nestas categorias.
-                </p>
-              </div>
-            </div>
+          {/* Rodapé */}
+          <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900/20 text-right text-xs text-gray-500 dark:text-gray-400">
+            Relatório gerado automaticamente pelo sistema FarmaTreinamento • {new Date().toLocaleDateString('pt-BR')}
           </div>
-          
-          {/* Rodapé do relatório */}
-          <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/20 text-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
-            <p>Este relatório foi gerado automaticamente pelo sistema FarmaTreinamento.</p>
-            <p>© 2025 FarmaTreinamento. Todos os direitos reservados.</p>
-          </div>
-        </div>
-        
-        {/* Instruções */}
-        <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-800 dark:text-blue-300 mb-2">Como usar a exportação de relatórios</h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
-            <li>• Clique no botão "Exportar PDF" para gerar um relatório em formato PDF</li>
-            <li>• O relatório será baixado automaticamente para o seu dispositivo</li>
-            <li>• Você pode imprimir o PDF ou compartilhá-lo com outras pessoas</li>
-            <li>• Os relatórios incluem dados de desempenho, progresso por categoria e recomendações personalizadas</li>
-            <li>• Para relatórios mais detalhados ou personalizados, acesse a página de Relatórios completa</li>
-          </ul>
         </div>
       </div>
     </div>

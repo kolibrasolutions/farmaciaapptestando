@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminLayout from '../../../../components/AdminLayout';
@@ -415,26 +417,26 @@ export default function EditarUsuarioPage() {
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">
-                Flashcards visualizados
+                Quizzes completados
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                127
+                12
               </dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">
-                Quizzes completados
+                Média de acertos
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                18
+                87%
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">
-                Taxa de acertos
+                Consultas realizadas
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                76%
+                28
               </dd>
             </div>
           </dl>

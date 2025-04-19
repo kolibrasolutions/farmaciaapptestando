@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -280,9 +282,6 @@ export default function ConsultaMedicamentosPage() {
                 onChange={(e) => {
                   setCategoriaSelecionada(e.target.value);
                   setTermoBusca('');
-                  if (e.target.value) {
-                    setTimeout(() => buscarMedicamentos(), 100);
-                  }
                 }}
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
               >
@@ -293,61 +292,58 @@ export default function ConsultaMedicamentosPage() {
                   </option>
                 ))}
               </select>
+              
+              <button
+                onClick={buscarMedicamentos}
+                className="mt-3 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Filtrar
+              </button>
             </div>
           </div>
         </div>
         
         {/* Detalhes do medicamento selecionado */}
         {medicamentoSelecionado && (
-          <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
-            <div className="px-4 py-5 sm:px-6 flex justify-between items-center bg-blue-50 border-b border-blue-100">
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
+            <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">{medicamentoSelecionado.nome}</h2>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  {medicamentoSelecionado.principioAtivo}
-                </p>
+                <h2 className="text-2xl font-bold text-gray-900">{medicamentoSelecionado.nome}</h2>
+                <p className="text-sm text-gray-500">{medicamentoSelecionado.principioAtivo}</p>
               </div>
               <button
                 onClick={limparSelecao}
-                className="inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="text-gray-400 hover:text-gray-500"
               >
-                Voltar aos resultados
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
             
-            <div className="border-t border-gray-200">
-              <dl>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Categoria
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {categorias.find(cat => cat.id === medicamentoSelecionado.categoria)?.nome || medicamentoSelecionado.categoria}
+            <div className="border-t border-gray-200 pt-6">
+              <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                <div className="sm:col-span-1">
+                  <dt className="text-sm font-medium text-gray-500">Categoria</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {categorias.find(c => c.id === medicamentoSelecionado.categoria)?.nome || medicamentoSelecionado.categoria}
                   </dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Apresentações
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
+                
+                <div className="sm:col-span-1">
+                  <dt className="text-sm font-medium text-gray-500">Apresentações</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    <ul className="list-disc pl-5 space-y-1">
                       {medicamentoSelecionado.apresentacoes.map((apresentacao, index) => (
-                        <li key={index} className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                          <div className="w-0 flex-1 flex items-center">
-                            <span className="ml-2 flex-1 w-0 truncate">
-                              {apresentacao}
-                            </span>
-                          </div>
-                        </li>
+                        <li key={index}>{apresentacao}</li>
                       ))}
                     </ul>
                   </dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Indicações
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Indicações</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
                     <ul className="list-disc pl-5 space-y-1">
                       {medicamentoSelecionado.indicacoes.map((indicacao, index) => (
                         <li key={index}>{indicacao}</li>
@@ -355,19 +351,10 @@ export default function ConsultaMedicamentosPage() {
                     </ul>
                   </dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Posologia
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {medicamentoSelecionado.posologia}
-                  </dd>
-                </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Contraindicações
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Contraindicações</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
                     <ul className="list-disc pl-5 space-y-1">
                       {medicamentoSelecionado.contraindicacoes.map((contraindicacao, index) => (
                         <li key={index}>{contraindicacao}</li>
@@ -375,11 +362,15 @@ export default function ConsultaMedicamentosPage() {
                     </ul>
                   </dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Efeitos Adversos
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Posologia</dt>
+                  <dd className="mt-1 text-sm text-gray-900">{medicamentoSelecionado.posologia}</dd>
+                </div>
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Efeitos Adversos</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
                     <ul className="list-disc pl-5 space-y-1">
                       {medicamentoSelecionado.efeitosAdversos.map((efeito, index) => (
                         <li key={index}>{efeito}</li>
@@ -387,11 +378,10 @@ export default function ConsultaMedicamentosPage() {
                     </ul>
                   </dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Interações Medicamentosas
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Interações Medicamentosas</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
                     <ul className="list-disc pl-5 space-y-1">
                       {medicamentoSelecionado.interacoes.map((interacao, index) => (
                         <li key={index}>{interacao}</li>
@@ -399,15 +389,21 @@ export default function ConsultaMedicamentosPage() {
                     </ul>
                   </dd>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Observações
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {medicamentoSelecionado.observacoes}
-                  </dd>
+                
+                <div className="sm:col-span-2">
+                  <dt className="text-sm font-medium text-gray-500">Observações Importantes</dt>
+                  <dd className="mt-1 text-sm text-gray-900">{medicamentoSelecionado.observacoes}</dd>
                 </div>
               </dl>
+            </div>
+            
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={limparSelecao}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Voltar para resultados
+              </button>
             </div>
           </div>
         )}
@@ -416,84 +412,77 @@ export default function ConsultaMedicamentosPage() {
         {!medicamentoSelecionado && (
           <>
             {carregando ? (
-              <div className="flex justify-center items-center h-64">
+              <div className="bg-white shadow rounded-lg p-6 flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                 <p className="ml-4 text-gray-700">Buscando medicamentos...</p>
               </div>
             ) : buscaRealizada ? (
-              resultados.length > 0 ? (
-                <div className="bg-white shadow overflow-hidden sm:rounded-md">
+              <div className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    Resultados da busca
+                  </h3>
+                  <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                    {resultados.length} medicamentos encontrados
+                  </p>
+                </div>
+                
+                {resultados.length > 0 ? (
                   <ul className="divide-y divide-gray-200">
                     {resultados.map((medicamento) => (
-                      <li key={medicamento.id}>
-                        <button
-                          onClick={() => selecionarMedicamento(medicamento)}
-                          className="block hover:bg-gray-50 w-full text-left"
-                        >
-                          <div className="px-4 py-4 sm:px-6">
-                            <div className="flex items-center justify-between">
-                              <p className="text-lg font-medium text-blue-600 truncate">
-                                {medicamento.nome}
-                              </p>
-                              <div className="ml-2 flex-shrink-0 flex">
-                                <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                  {categorias.find(cat => cat.id === medicamento.categoria)?.nome || medicamento.categoria}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="mt-2 sm:flex sm:justify-between">
-                              <div className="sm:flex">
-                                <p className="flex items-center text-sm text-gray-500">
-                                  {medicamento.principioAtivo}
-                                </p>
-                              </div>
-                              <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                <p>
-                                  {medicamento.apresentacoes[0]}
-                                  {medicamento.apresentacoes.length > 1 ? ` e mais ${medicamento.apresentacoes.length - 1} apresentações` : ''}
-                                </p>
-                              </div>
-                            </div>
+                      <li key={medicamento.id} className="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="text-lg font-medium text-blue-600">{medicamento.nome}</h4>
+                            <p className="text-sm text-gray-500">{medicamento.principioAtivo}</p>
+                            <p className="mt-1 text-sm text-gray-600">
+                              {categorias.find(c => c.id === medicamento.categoria)?.nome}
+                            </p>
+                            <p className="mt-2 text-sm text-gray-600">
+                              <span className="font-medium">Indicações:</span> {medicamento.indicacoes.join(', ')}
+                            </p>
                           </div>
-                        </button>
+                          <button
+                            onClick={() => selecionarMedicamento(medicamento)}
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          >
+                            Ver detalhes
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) : (
-                <div className="bg-white shadow rounded-lg p-8 text-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum medicamento encontrado</h3>
-                  <p className="text-gray-500 mb-6">
-                    Tente buscar com outros termos ou selecione uma categoria diferente.
-                  </p>
-                </div>
-              )
+                ) : (
+                  <div className="px-4 py-12 sm:px-6 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">Nenhum medicamento encontrado</h3>
+                    <p className="text-gray-500 mb-4">Tente buscar com outros termos ou selecione uma categoria diferente.</p>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="bg-white shadow rounded-lg p-8 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-white shadow rounded-lg p-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Busque por medicamentos</h3>
-                <p className="text-gray-500 mb-6">
-                  Digite o nome ou princípio ativo do medicamento, ou selecione uma categoria para começar.
-                </p>
+                <h3 className="text-lg font-medium text-gray-900 mb-1">Busque um medicamento</h3>
+                <p className="text-gray-500 mb-4">Digite o nome ou princípio ativo do medicamento, ou selecione uma categoria para começar.</p>
               </div>
             )}
           </>
         )}
         
         {/* Informações adicionais */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-blue-800 mb-2">Informações importantes</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• As informações disponíveis nesta consulta são apenas para referência e não substituem a orientação profissional</li>
-            <li>• Sempre verifique a bula completa do medicamento antes de fazer recomendações</li>
-            <li>• Esteja atento a contraindicações, interações medicamentosas e populações especiais (gestantes, idosos, crianças)</li>
-            <li>• Em caso de dúvida, consulte o farmacêutico responsável ou encaminhe o paciente ao médico</li>
-            <li>• Lembre-se que mesmo medicamentos isentos de prescrição podem causar efeitos adversos e interações</li>
+        <div className="mt-8 bg-blue-50 border border-blue-100 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-blue-900 mb-2">Informações importantes</h3>
+          <ul className="text-blue-800 space-y-2">
+            <li>• As informações disponibilizadas são apenas para referência e não substituem a orientação de um profissional de saúde.</li>
+            <li>• Sempre verifique a bula do medicamento para informações completas e atualizadas.</li>
+            <li>• Em caso de dúvidas ou reações adversas, consulte um farmacêutico ou médico.</li>
+            <li>• Medicamentos isentos de prescrição ainda podem causar efeitos colaterais e interações medicamentosas.</li>
+            <li>• Siga sempre a posologia recomendada e não ultrapasse a dose máxima diária.</li>
           </ul>
         </div>
       </div>
