@@ -1,60 +1,89 @@
-import Link from 'next/link'
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-6 md:p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm">
-        <h1 className="text-4xl font-bold text-center mb-8">Treinamento para Balconistas de Farmácia</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-2xl font-semibold mb-4 text-blue-600">Módulo de Treinamento</h2>
-            <p className="mb-6 text-gray-700">
-              Aprenda e pratique o atendimento farmacêutico com flashcards interativos e 
-              perguntas de múltipla escolha baseadas em situações reais.
-            </p>
-            <div className="flex flex-col space-y-4">
-              <Link 
-                href="/treinamento/flashcards" 
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors text-center"
-              >
-                Flashcards Interativos
-              </Link>
-              <Link 
-                href="/treinamento/quiz" 
-                className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors text-center"
-              >
-                Quiz de Múltipla Escolha
-              </Link>
-            </div>
-          </div>
-          
-          <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-2xl font-semibold mb-4 text-purple-600">Módulo de Consulta</h2>
-            <p className="mb-6 text-gray-700">
-              Pesquise rapidamente qual medicamento indicar para determinados sintomas ou condições,
-              com informações sobre posologia, contraindicações e alternativas.
-            </p>
-            <Link 
-              href="/consulta" 
-              className="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600 transition-colors block text-center"
-            >
-              Consultar Medicamentos
-            </Link>
-          </div>
-        </div>
-        
-        <div className="mt-16 p-6 bg-gray-50 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Sobre o Aplicativo</h2>
-          <p className="text-gray-700">
-            Este aplicativo foi desenvolvido para auxiliar no treinamento de balconistas de farmácia,
-            fornecendo uma ferramenta prática para aprendizado e consulta rápida durante o atendimento.
-            Utilize os flashcards para memorizar as recomendações farmacêuticas e o quiz para testar
-            seus conhecimentos. O módulo de consulta permite encontrar rapidamente informações sobre
-            medicamentos para diferentes sintomas e condições.
-          </p>
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+export default function HomePage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simular carregamento
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Carregando...</p>
         </div>
       </div>
-    </main>
-  )
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+            Farmácia Training App
+          </h1>
+          <p className="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+            Plataforma de treinamento para profissionais de farmácia
+          </p>
+        </div>
+
+        <div className="mt-12">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="bg-white overflow-hidden shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg font-medium text-gray-900">Área de Treinamento</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Acesse flashcards, quizzes e simulações para aprimorar seus conhecimentos.
+                </p>
+                <div className="mt-4">
+                  <Link href="/treinamento/flashcards" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+                    Acessar treinamentos <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white overflow-hidden shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg font-medium text-gray-900">Consulta Rápida</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Consulte informações sobre medicamentos e sintomas para atendimento.
+                </p>
+                <div className="mt-4">
+                  <Link href="/consulta/medicamentos" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+                    Fazer consulta <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white overflow-hidden shadow rounded-lg">
+              <div className="px-4 py-5 sm:p-6">
+                <h3 className="text-lg font-medium text-gray-900">Área Administrativa</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Gerencie farmácias, usuários e acompanhe o progresso dos treinamentos.
+                </p>
+                <div className="mt-4">
+                  <Link href="/login" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+                    Fazer login <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
